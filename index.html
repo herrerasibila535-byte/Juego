@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>El latido que te espera</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      background: #050505; /* Oscuridad casi total */
+      color: #e6e6e6; /* Blanco suave, no agresivo */
+      font-family: 'Georgia', serif; /* Tipografía clásica y elegante */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    #container {
+      max-width: 700px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* El Corazón */
+    #heart {
+      width: 60px;
+      height: 60px;
+      background: #8b0000; /* Rojo sangre oscuro */
+      transform: rotate(45deg);
+      animation: beat 4s infinite ease-in-out; /* Latido muy lento */
+      margin-bottom: 40px;
+      position: relative;
+      box-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
+    }
+
+    #heart::before,
+    #heart::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: #8b0000;
+      border-radius: 50%;
+    }
+
+    #heart::before {
+      top: -30px;
+      left: 0;
+    }
+
+    #heart::after {
+      left: -30px;
+      top: 0;
+    }
+
+    /* Animación del latido */
+    @keyframes beat {
+      0% { transform: scale(1) rotate(45deg); opacity: 0.8; }
+      15% { transform: scale(1.15) rotate(45deg); opacity: 1; }
+      30% { transform: scale(1) rotate(45deg); opacity: 0.8; }
+      45% { transform: scale(1.15) rotate(45deg); opacity: 1; }
+      100% { transform: scale(1) rotate(45deg); opacity: 0.8; }
+    }
+
+    /* El Texto */
+    #text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      transition: opacity 2.5s ease-in-out; /* Transición muy suave */
+      min-height: 120px; /* Evita saltos de pantalla */
+    }
+
+    .visible {
+      opacity: 1 !important;
+    }
+    
+    /* Pequeño detalle para móviles */
+    @media (max-width: 600px) {
+      #text { font-size: 1rem; }
+      #heart { width: 50px; height: 50px; }
+      #heart::before, #heart::after { width: 50px; height: 50px; top: -25px; left: -25px; }
+      #heart::after { left: -25px; top: 0; }
+      #heart::before { top: -25px; left: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div id="heart"></div>
+    <div id="text"></div>
+  </div>
+
+  <script>
+    const texts = [
+      // ACTO I — El Umbral
+      `Si estás acá,<br>no es por curiosidad.<br><br>Es porque me sentís.`,
+      
+      `Nada de esto es automático.<br>Todo existe<br>porque elegís quedarte.`,
+
+      // ACTO II — La Memoria
+      `Hubo un tiempo en que la distancia<br>era tu forma más segura de existir.<br><br>Odiar a la gente<br>era solo una manera de protegerte.`,
+
+      `Nuestra cercanía vino disfrazada.<br>Bromas duras. Insultos compartidos.<br><br>"No te muestro lo frágil,<br>pero me quedo cerca".`,
+
+      `No te pido que recuerdes todo.<br>Solo que no finjas olvidar.`,
+
+      // ACTO III — El Deseo Consciente
+      `Y un día, dejaste de ser invisible.<br>Fiel. Sincero. Auténtico.<br><br>Amás con dirección,<br>no con ruido.`,
+
+      `No te deseo porque sos mío.<br>Te deseo porque estás.<br><br>Porque tu lealtad no es una jaula,<br>es una estructura.`,
+
+      // ACTO IV — La Herida Abierta
+      `Para vos, lo carnal no es impulso.<br>Es consagración.<br>Es cuidado.<br>Es futuro.`,
+
+      `No te muestro esto para que me cuides.<br>Te lo muestro porque confío.<br><br>Porque viste mi sombra<br>y no corriste.`,
+
+      // ACTO V — La Elección
+      `Podés irte.<br>O podés quedarte.<br><br>Ninguna opción te quita lo que fue.`,
+
+      `No te até a este latido.<br>Lo dejé acá...<br><br>por si querías volver.`
+    ];
+
+    let index = 0;
+    const textDiv = document.getElementById("text");
+
+    // TIEMPOS (en milisegundos)
+    const readTime = 7000;   // Tiempo para leer (7 segundos)
+    const fadeTime = 2500;   // Tiempo que tarda en aparecer/desaparecer (2.5s)
+    
+    // El ciclo total es: Aparecer + Leer + Desaparecer + Breve Pausa
+    const cycleTime = fadeTime + readTime + fadeTime + 1000;
+
+    function updateText() {
+      // 1. Borrar texto actual
+      textDiv.classList.remove("visible");
+
+      // 2. Esperar a que se borre completamente antes de poner el nuevo
+      setTimeout(() => {
+        textDiv.innerHTML = texts[index];
+        textDiv.classList.add("visible");
+
+        // Preparar el índice para la próxima vuelta
+        // Si querés que se detenga en el último mensaje para siempre, cambiá la lógica aquí.
+        // Por ahora, hace un loop infinito suave.
+        index = (index + 1) % texts.length;
+        
+      }, fadeTime); 
+    }
+
+    // Iniciar la secuencia
+    setTimeout(updateText, 1000); // Primer inicio
+    setInterval(updateText, cycleTime); // Bucle
+  </script>
+</body>
+</html>
